@@ -20,8 +20,8 @@ export interface Animation {
   key: string | undefined
   /** The last animation props seen by this node. */
   props: AnimationProps | null
-  /** Stable reference to the current "leave" animation props. */
-  leaveProps: AnimationProps | null
+  /** Stable reference to the current "leave" prop. */
+  leaveProp: AnimateLifecycleProps['leave']
   /** The callback used to subscribe to the presence context. */
   leaveSubscription: PresenceSubscription | null
   /**

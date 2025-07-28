@@ -48,7 +48,7 @@ hook('diffed', (vnode: VNode) => {
         (animation = {
           key: undefined,
           props: null,
-          leaveProps: null,
+          leaveProp: null,
           leaveSubscription: null,
           initial: undefined,
           keyframes: undefined,

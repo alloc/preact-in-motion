@@ -2,7 +2,7 @@ import { VNode } from 'preact'
 import { Animation, applyLifecycleAnimation } from './animation'
 import { getContextValue } from './internal/context'
 import { PresenceContext } from './presence'
-import { AnimateLifecycleProps } from './types'
+import { AnimateLifecycleProps, AnimationProps } from './types'
 import { vnodeToPresence } from './vnodeCaches'
 
 export function diffLeaveAnimation(
@@ -20,20 +20,29 @@ export function diffLeaveAnimation(
       return
     }
 
-    if (leave.reverse) {
-      Object.assign(leave, animation.initial || initial)
-      delete leave.reverse
-    }
-
-    animation.leaveProps = leave
+    animation.leaveProp = leave
     animation.leaveSubscription ||= presence.subscribe(leavingElement => {
       if (leavingElement.contains(dom)) {
-        return applyLifecycleAnimation(dom, animation, animation.leaveProps!)
+        let leave = animation.leaveProp
+        if (typeof leave === 'function') {
+          leave = leave()
+        }
+        if (!leave) {
+          return
+        }
+        if (leave.reverse) {
+          const { reverse, ...leaveWithoutReverse } = leave
+          leave = Object.assign(
+            leaveWithoutReverse,
+            animation.initial || initial
+          ) as AnimationProps
+        }
+        return applyLifecycleAnimation(dom, animation, leave)
       }
     })
   } else if (animation.leaveSubscription) {
     animation.leaveSubscription.remove()
     animation.leaveSubscription = null
-    animation.leaveProps = null
+    animation.leaveProp = null
   }
 }
