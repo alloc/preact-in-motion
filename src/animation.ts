@@ -1,7 +1,4 @@
-import {
-  AnimationPlaybackControlsWithThen,
-  ValueKeyframesDefinition,
-} from 'motion'
+import { AnimationPlaybackControlsWithThen } from 'motion'
 import { animate } from 'motion/mini'
 import { EventAnimation } from './eventAnimation'
 import { PresenceSubscription } from './presence'
@@ -46,27 +43,6 @@ export interface Animation {
   } | null
 }
 
-function setInitialValues(
-  dom: HTMLElement,
-  animation: Animation,
-  keyframes: DOMKeyframesDefinition,
-  initial: AnimateLifecycleProps['initial']
-) {
-  animation.initial = initial = { ...initial }
-  for (const prop in keyframes) {
-    if (initial[prop] !== undefined) {
-      continue
-    }
-    const keyframe = keyframes[prop as never] as ValueKeyframesDefinition
-    const value = Array.isArray(keyframe) ? keyframe[0] : keyframe
-    // If the value is null, it means the keyframe will be inferred from the
-    // computed style, so we don't know its value here.
-    if (value !== null) {
-      dom.style[prop as never] = initial[prop] = value as any
-    }
-  }
-}
-
 function assignImmediateValues(
   dom: HTMLElement,
   assigned: Record<string, any>
@@ -76,6 +52,48 @@ function assignImmediateValues(
   } else {
     Object.assign(dom.style, assigned)
   }
+}
+
+function applyAnimation(
+  dom: HTMLElement,
+  animation: Animation,
+  keyframes: DOMKeyframesDefinition,
+  options: AnimationOptions | Record<string, AnimationOptions> | undefined,
+  initial: AnimateLifecycleProps['initial'],
+  ref: AnimationRef | undefined
+) {
+  if (!dom.isConnected) {
+    animation.initial = initial = { ...initial }
+    for (const key in keyframes) {
+      if (initial[key] !== undefined) {
+        continue
+      }
+
+      const prop = key as never
+      const keyframe = keyframes[prop]
+
+      let value: any
+      if (Array.isArray(keyframe)) {
+        const duration =
+          options &&
+          (prop in options
+            ? (options as Record<string, AnimationOptions>)[prop]
+            : (options as AnimationOptions)
+          ).duration
+
+        value = keyframe[duration != null && duration <= 0 ? 1 : 0]
+      } else {
+        value = keyframe
+      }
+
+      // If the value is null, it means the keyframe will be inferred from the
+      // computed style, so we don't know its value here.
+      if (value !== null) {
+        dom.style[prop] = initial[prop] = value
+      }
+    }
+  }
+  setAnimationControls(animation, animate(dom, keyframes, options), ref)
 }
 
 export function applyUpdateAnimation(
@@ -103,10 +121,7 @@ export function applyUpdateAnimation(
     assignImmediateValues(dom, assigned)
   }
   if (keyframes) {
-    if (!dom.isConnected) {
-      setInitialValues(dom, animation, keyframes, initial)
-    }
-    setAnimationControls(animation, animate(dom, keyframes, options), ref)
+    applyAnimation(dom, animation, keyframes, options, initial, ref)
   } else {
     stopAnimation(animation, ref)
   }
@@ -127,10 +142,7 @@ export function applyLifecycleAnimation(
     assignImmediateValues(dom, assigned)
   }
   if (keyframes) {
-    if (!dom.isConnected) {
-      setInitialValues(dom, animation, keyframes, initial)
-    }
-    setAnimationControls(animation, animate(dom, keyframes, options), ref)
+    applyAnimation(dom, animation, keyframes, options, initial, ref)
     return animation.controls
   }
   return null

@@ -17,7 +17,7 @@ import {
 export type UpdateAnimationProps = {
   assigned?: Record<string, string>
   keyframes?: DOMKeyframesDefinition
-  options?: AnimationOptions
+  options?: AnimationOptions | Record<string, AnimationOptions>
   key?: string
   ref?: AnimationRef
 }
