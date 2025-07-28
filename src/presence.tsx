@@ -91,7 +91,7 @@ export function AnimatePresence(props: {
 
     if (!animation) {
       const prevElement = getElementForVNode(prevNode)
-      if (!prevElement) {
+      if (!prevElement?.isConnected) {
         return false
       }
       for (const subscription of context.subscriptions.values()) {
