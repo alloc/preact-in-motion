@@ -88,7 +88,10 @@ export type AnimateLifecycleProps = {
   /**
    * Animate before this element is removed from the DOM.
    */
-  leave?: LeaveAnimationProps | (() => LeaveAnimationProps | falsy) | falsy
+  leave?:
+    | LeaveAnimationProps
+    | ((element: HTMLElement) => LeaveAnimationProps | falsy)
+    | falsy
   /**
    * Animate when this element is hovered on.
    */

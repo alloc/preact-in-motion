@@ -25,7 +25,7 @@ export function diffLeaveAnimation(
       if (leavingElement.contains(dom)) {
         let leave = animation.leaveProp
         if (typeof leave === 'function') {
-          leave = leave()
+          leave = leave(dom)
         }
         if (!leave) {
           return
