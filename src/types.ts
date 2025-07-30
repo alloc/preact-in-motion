@@ -22,7 +22,14 @@ type MotionMiniOptions = UncheckedPick<
   keyof typeof SUPPORTED_OPTIONS
 >
 
-export type AnimationOptionsFn = (prop: string) => MotionMiniOptions
+/** @deprecated Use `TransitionFn` instead. */
+export type AnimationOptionsFn = TransitionFn
+
+export type TransitionFn = (prop: string) => MotionMiniOptions
+
+export type TransitionOptions = MotionMiniOptions & {
+  [K in keyof DOMKeyframesDefinition]?: MotionMiniOptions
+}
 
 export interface AnimationOptions extends MotionMiniOptions {
   /**
@@ -32,11 +39,7 @@ export interface AnimationOptions extends MotionMiniOptions {
   /**
    * Customize the animation options for each style property.
    */
-  transition?:
-    | AnimationOptionsFn
-    | (MotionMiniOptions & {
-        [K in keyof DOMKeyframesDefinition]?: MotionMiniOptions
-      })
+  transition?: TransitionFn | TransitionOptions
 }
 
 export type AnimationProps = DOMKeyframesDefinition & AnimationOptions
