@@ -19,7 +19,7 @@ export type PresenceContext = {
   enterDelay: number | undefined
   keys: Key[]
   nodes: VNode[]
-  leaveAnimations: Map<string, AnimationPlaybackControlsWithThen>
+  leaveAnimations: Map<string, Promise<any>[]>
   subscriptions: Set<PresenceSubscription>
   subscribe: (callback: PresenceCallback) => PresenceSubscription
 }
@@ -86,28 +86,31 @@ export function AnimatePresence(props: {
       return false
     }
 
-    let animation: AnimationPlaybackControlsWithThen | null | void =
-      context.leaveAnimations.get(prevKey)
+    let animations = context.leaveAnimations.get(prevKey)
 
-    if (!animation) {
+    if (!animations) {
       const prevElement = getElementForVNode(prevNode)
       if (!prevElement?.isConnected) {
         return false
       }
       for (const subscription of context.subscriptions.values()) {
-        animation = subscription.callback(prevElement)
+        const animation = subscription.callback(prevElement)
         if (animation) {
-          context.leaveAnimations.set(prevKey, animation)
-          animation.then(() => {
-            context.leaveAnimations.delete(prevKey)
-            subscription.remove()
-            forceUpdate()
-          })
+          if (!animations) {
+            context.leaveAnimations.set(prevKey, (animations = []))
+          }
+          animations.push(animation.then(() => subscription.remove()))
         }
+      }
+      if (animations) {
+        Promise.all(animations).then(() => {
+          context.leaveAnimations.delete(prevKey)
+          forceUpdate()
+        })
       }
     }
 
-    if (animation) {
+    if (animations) {
       // Preserve this node in the DOM.
       nextKeys.push(prevKey)
       nextNodes.push(prevNode)
