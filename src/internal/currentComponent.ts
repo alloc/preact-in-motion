@@ -1,19 +1,17 @@
-import { PrivateHook, hook } from './hook'
+import { VNode } from 'preact'
 import { getComponentForVNode } from './vnode'
 
 export let currentComponent: any = null
 
 let componentStack: any[] = []
 
-hook(PrivateHook.Render, (vnode: any) => {
+export function storeCurrentComponent(vnode: VNode) {
   componentStack.push(currentComponent)
   currentComponent = getComponentForVNode(vnode)
-  // console.log('[render]', currentComponent)
-})
+}
 
-hook('diffed', (vnode: any) => {
+export function popCurrentComponent(vnode: VNode) {
   if (currentComponent && currentComponent === getComponentForVNode(vnode)) {
-    // console.log('[diff start]', currentComponent)
     currentComponent = componentStack.pop()
   }
-})
+}
