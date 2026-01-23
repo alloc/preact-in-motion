@@ -21,10 +21,8 @@ import { vnodeToAnimateProp, vnodeToPresence } from './vnodeCaches'
 const animations = new WeakMap<Element, Animation>()
 
 declare module 'preact' {
-  namespace JSX {
-    interface HTMLAttributes<RefType extends EventTarget> {
-      animate?: AnimateProp
-    }
+  interface HTMLAttributes<RefType extends EventTarget> {
+    animate?: AnimateProp
   }
 }
 

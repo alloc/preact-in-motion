@@ -13,7 +13,7 @@ importers:
         version: 1.0.0
       '@preact/signals':
         specifier: ^2.2.1
-        version: 2.2.1(preact@10.26.9)
+        version: 2.2.1(preact@11.0.0-beta.0)
       '@types/node':
         specifier: ^24.0.13
         version: 24.0.13
@@ -21,8 +21,8 @@ importers:
         specifier: ^12.23.3
         version: 12.23.3
       preact:
-        specifier: ^10.26.9
-        version: 10.26.9
+        specifier: 11.0.0-beta.0
+        version: 11.0.0-beta.0
       preact-in-motion:
         specifier: 'link:'
         version: 'link:'
@@ -708,8 +708,8 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact@10.26.9:
-    resolution: {integrity: sha512-SSjF9vcnF27mJK1XyFMNJzFd5u3pQiATFqoaDy03XuN00u4ziveVVEGt5RKJrDR8MHE/wJo9Nnad56RLzS2RMA==}
+  preact@11.0.0-beta.0:
+    resolution: {integrity: sha512-IcODoASASYwJ9kxz7+MJeiJhvLriwSb4y4mHIyxdgaRZp6kPUud7xytrk/6GZw8U3y6EFJaRb5wi9SrEK+8+lg==}
 
   prettier@3.6.2:
     resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
@@ -1094,10 +1094,10 @@ snapshots:
 
   '@preact/signals-core@1.11.0': {}
 
-  '@preact/signals@2.2.1(preact@10.26.9)':
+  '@preact/signals@2.2.1(preact@11.0.0-beta.0)':
     dependencies:
       '@preact/signals-core': 1.11.0
-      preact: 10.26.9
+      preact: 11.0.0-beta.0
 
   '@rollup/rollup-android-arm-eabi@4.44.2':
     optional: true
@@ -1487,7 +1487,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact@10.26.9: {}
+  preact@11.0.0-beta.0: {}
 
   prettier@3.6.2: {}
 

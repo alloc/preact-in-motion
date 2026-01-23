@@ -29,7 +29,7 @@
     "@preact/signals": "^2.2.1",
     "@types/node": "^24.0.13",
     "motion": "^12.23.3",
-    "preact": "^10.26.9",
+    "preact": "11.0.0-beta.0",
     "preact-in-motion": "link:",
     "prettier": "^3.6.2",
     "radashi": "13.0.0-beta.99854e3",
