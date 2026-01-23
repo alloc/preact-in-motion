@@ -12,6 +12,8 @@ This package uses the [Preact Options API](https://preactjs.com/guide/v10/option
 
 Choose your package manager, then install this package and the `motion` package.
 
+Note: If you're using `preact@beta`, you must install `preact-in-motion@beta`.
+
 - **PNPM**
 
   ```
